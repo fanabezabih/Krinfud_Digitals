@@ -1,0 +1,180 @@
+header{
+
+position:absolute;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+z-index:20;
+
+padding:30px 60px;
+
+}
+
+nav{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.logo{
+
+font-size:28px;
+
+font-weight:800;
+
+}
+
+.logo span{
+
+font-weight:300;
+color: var(--gold);
+
+}
+
+.menu{
+
+display:flex;
+
+align-items:center;
+
+gap:45px;
+
+}
+
+.menu button{
+
+padding:14px 28px;
+
+background: var(--maroon);
+
+color:white;
+
+border-radius:10px;
+
+font-size:15px;
+
+transition: background 0.3s;
+
+}
+
+.menu button:hover{
+
+background: var(--gold);
+color: var(--bg-dark);
+
+}
+
+#hero{
+
+position:relative;
+
+width:100vw;
+
+height:100vh;
+
+overflow:hidden;
+
+background-image:
+    radial-gradient(ellipse at center, rgba(26,10,10,0.55) 0%, rgba(26,10,10,0.92) 100%),
+    linear-gradient(180deg, rgba(26,10,10,0.6) 0%, rgba(26,10,10,0.3) 50%, rgba(0,0,0,0.95) 100%),
+    url("../images/krinfudlogo.png");
+
+background-size: cover;
+
+background-position: center;
+
+background-color: var(--bg-dark);
+
+}
+
+#three-container{
+
+position:absolute;
+
+inset:0;
+
+}
+
+.hero-content{
+
+position:absolute;
+
+bottom:18%;
+
+left:0;
+
+width:100%;
+
+z-index:5;
+
+text-align:center;
+
+pointer-events:none;
+
+}
+
+.tagline{
+
+font-size:14px;
+
+letter-spacing:0.35em;
+
+text-transform:uppercase;
+
+color: var(--text-muted);
+
+font-weight:400;
+
+opacity:0.85;
+
+}
+
+.scroll-down{
+
+position:absolute;
+
+bottom:1.5rem;
+
+left:50%;
+
+transform:translateX(-50%);
+
+z-index:10;
+
+color: var(--text-muted);
+
+font-size:0.7rem;
+
+letter-spacing:0.25em;
+
+text-transform:uppercase;
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+gap:0.6rem;
+
+opacity:0.6;
+
+}
+
+.scroll-down .line{
+
+width:1px;
+
+height:50px;
+
+background:linear-gradient(to bottom, var(--gold), transparent);
+
+}
