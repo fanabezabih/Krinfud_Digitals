@@ -35,9 +35,9 @@ export function createCosmicGuy(scene) {
 }
 
 // --------------------
-// Wander settings (used AFTER the delivery sequence finishes)
+// Wander + scroll-sweep settings (used AFTER the delivery sequence finishes)
 // --------------------
-const ANCHOR_Z = 3;
+export const ANCHOR_Z = 3;
 const RANGE_Z = 1.5;
 const SCREEN_USE_FACTOR = 0.62;
 
@@ -46,7 +46,24 @@ const SPHERE_MARGIN = 1.4;
 const EXCLUSION_X = SPHERE_RADIUS + SPHERE_MARGIN;
 const EXCLUSION_Y = SPHERE_RADIUS + SPHERE_MARGIN;
 
-export function updateCosmicGuy(rig, elapsedTime, camera) {
+const WANDER_LERP = 0.045; // smoothing — lower = smoother/slower reaction to changes
+
+// How many full left<->right sweeps he makes across the ENTIRE page scroll.
+// Higher = sweeps direction more often as you scroll through sections.
+const SWEEP_CYCLES = 2.2;
+
+// How much of his horizontal motion is the scroll-driven sweep vs.
+// his own small ambient drift (these should add up to roughly 1).
+const SWEEP_WEIGHT = 0.75;
+const AMBIENT_WEIGHT = 0.25;
+
+/**
+ * @param rig            the cosmic guy group
+ * @param elapsedTime    seconds since his wander loop started (ambient motion)
+ * @param camera         the scene camera
+ * @param scrollProgress 0 (top of page) -> 1 (bottom of page)
+ */
+export function updateCosmicGuy(rig, elapsedTime, camera, scrollProgress = 0) {
     const distance = camera.position.z - ANCHOR_Z;
     const vFov = THREE.MathUtils.degToRad(camera.fov);
     const visibleHeight = 2 * Math.tan(vFov / 2) * distance;
@@ -55,22 +72,32 @@ export function updateCosmicGuy(rig, elapsedTime, camera) {
     const rangeX = (visibleWidth / 2) * SCREEN_USE_FACTOR;
     const rangeY = (visibleHeight / 2) * SCREEN_USE_FACTOR;
 
-    let x =
-        Math.sin(elapsedTime * 0.18) * rangeX +
-        Math.sin(elapsedTime * 0.47) * (rangeX * 0.2);
+    // Scroll-driven sweep: smoothly slides left <-> right as scrollProgress
+    // goes from 0 to 1, reversing direction SWEEP_CYCLES times along the way.
+    const sweepX = Math.sin(scrollProgress * Math.PI * SWEEP_CYCLES) * rangeX;
+
+    // Small ambient drift on top, so he never looks perfectly static
+    // even while scroll position isn't changing.
+    const ambientX =
+        Math.sin(elapsedTime * 0.18) * rangeX * 0.5 +
+        Math.sin(elapsedTime * 0.47) * (rangeX * 0.1);
+
+    let x = sweepX * SWEEP_WEIGHT + ambientX * AMBIENT_WEIGHT;
 
     let y =
         Math.sin(elapsedTime * 0.26) * rangeY +
         Math.sin(elapsedTime * 0.11) * (rangeY * 0.25);
 
+    // Keep him clear of the sphere near the top of the page.
     const closeness = Math.max(0, 1 - Math.abs(x) / EXCLUSION_X);
     const push = closeness * EXCLUSION_Y;
     const side = y >= 0 ? 1 : -1;
     y = side * (Math.abs(y) + push);
 
-    rig.position.x = x;
-    rig.position.y = y;
-    rig.position.z = ANCHOR_Z + Math.sin(elapsedTime * 0.14) * RANGE_Z;
+    const z = ANCHOR_Z + Math.sin(elapsedTime * 0.14) * RANGE_Z;
 
+    rig.position.lerp(new THREE.Vector3(x, y, z), WANDER_LERP);
+
+    // Gentle tilt in the direction he's currently sweeping
     rig.userData.sprite.material.rotation = Math.sin(elapsedTime * 0.3) * 0.18;
 }

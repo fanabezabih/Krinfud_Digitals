@@ -1,47 +1,63 @@
 // Custom cursor: small dot follows exactly, larger ring trails smoothly.
-// Ported from the old design (cursor-dot / cursor-ring).
 
 export function initCustomCursor() {
-    const dot = document.createElement("div");
-    dot.className = "cursor-dot";
 
-    const ring = document.createElement("div");
-    ring.className = "cursor-ring";
+    function start() {
 
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
+        const dot = document.createElement("div");
+        dot.className = "cursor-dot";
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-    let ringScale = 1;
+        const ring = document.createElement("div");
+        ring.className = "cursor-ring";
 
-    window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        document.body.appendChild(dot);
+        document.body.appendChild(ring);
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+        let ringScale = 1;
+
+        // Position immediately so they're visible before the first mousemove,
+        // instead of sitting at (0,0) in the top-left corner.
         dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
-    });
+        ring.style.transform = `translate(${mouseX - 20}px, ${mouseY - 20}px)`;
 
-    function loop() {
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
+        window.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+        });
 
-        ring.style.transform =
-            `translate(${ringX - 20}px, ${ringY - 20}px) scale(${ringScale})`;
+        function loop() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
 
-        requestAnimationFrame(loop);
+            ring.style.transform =
+                `translate(${ringX - 20}px, ${ringY - 20}px) scale(${ringScale})`;
+
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        document.querySelectorAll("a, button").forEach((el) => {
+            el.addEventListener("mouseenter", () => {
+                ringScale = 1.6;
+                ring.style.borderColor = "#D4A843";
+            });
+            el.addEventListener("mouseleave", () => {
+                ringScale = 1;
+                ring.style.borderColor = "rgba(212,168,67,0.5)";
+            });
+        });
     }
-    loop();
 
-    document.querySelectorAll("a, button").forEach((el) => {
-        el.addEventListener("mouseenter", () => {
-            ringScale = 1.6;
-            ring.style.borderColor = "#D4A843";
-        });
-        el.addEventListener("mouseleave", () => {
-            ringScale = 1;
-            ring.style.borderColor = "rgba(212,168,67,0.25)";
-        });
-    });
+    // Guard against running before <body> exists, even though type="module"
+    // scripts normally execute after the document is parsed.
+    if (document.body) {
+        start();
+    } else {
+        document.addEventListener("DOMContentLoaded", start);
+    }
 }

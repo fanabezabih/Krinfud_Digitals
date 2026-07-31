@@ -2,7 +2,13 @@ import * as THREE from "three";
 
 import { createSphere } from "./sphere.js";
 import { createTextEngine } from "./textEngine.js";
-import { createCosmicGuy, updateCosmicGuy, HAND_OFFSET, SPRITE_WIDTH, SPRITE_HEIGHT } from "./cosmicGuy.js";
+import {
+    createCosmicGuy,
+    updateCosmicGuy,
+    HAND_OFFSET,
+    SPRITE_WIDTH,
+    SPRITE_HEIGHT
+} from "./cosmicGuy.js";
 import { animate } from "./animation.js";
 import { initCustomCursor } from "./cursor.js";
 
@@ -53,17 +59,12 @@ const light = new THREE.DirectionalLight(0xffffff, 3);
 light.position.set(5, 8, 8);
 scene.add(light);
 
-// --------------------
-// Objects
-// --------------------
+
 
 const sphere = createSphere(scene);
 const textGroup = createTextEngine(scene);
 const cosmicGuy = createCosmicGuy(scene);
 
-// --------------------
-// Interaction state
-// --------------------
 
 const state = {
     isRotating: false,
@@ -102,6 +103,7 @@ const guyDeliverPosition = new THREE.Vector3(0, 1.2, 4);
 const guyWanderStart = new THREE.Vector3(0, 4.5, -8);
 
 const sphereHome = new THREE.Vector3(0, 0, 0);
+const textHome = new THREE.Vector3(0, 0, 0);
 
 cosmicGuy.position.copy(guyStartPosition);
 cosmicGuy.userData.sprite.scale.set(0, 0, 1);
@@ -209,15 +211,40 @@ function playIntro(realElapsed) {
 
 }
 
-// --------------------
-// Text ring rotation
-// --------------------
+
 
 const TEXT_ROTATION_SPEED = 0.15;
 
-// --------------------
-// Click detection (raycasting on the sphere)
-// --------------------
+
+
+function worldUnitsPerPixelAt(distance) {
+    const vFov = THREE.MathUtils.degToRad(camera.fov);
+    const visibleHeight = 2 * Math.tan(vFov / 2) * distance;
+    return visibleHeight / window.innerHeight;
+}
+
+function applyScrollCompensation() {
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    const sphereDistance = camera.position.z - sphereHome.z;
+    const perPixelSphere = worldUnitsPerPixelAt(sphereDistance);
+    sphere.position.y = sphereHome.y + scrollY * perPixelSphere;
+
+    const textDistance = camera.position.z - textHome.z;
+    const perPixelText = worldUnitsPerPixelAt(textDistance);
+    textGroup.position.y = textHome.y + scrollY * perPixelText;
+}
+
+
+
+function getScrollProgress() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) return 0;
+    return THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
+}
+
+
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
@@ -255,9 +282,7 @@ window.addEventListener("mousemove", (event) => {
 
 });
 
-// --------------------
-// Cosmic guy loop
-// --------------------
+
 
 const clock = new THREE.Clock();
 
@@ -272,23 +297,23 @@ function guyLoop() {
     if (!state.introComplete) {
         playIntro(realElapsed);
     } else {
+        applyScrollCompensation();
+
         const wanderElapsed = realElapsed - wanderClockOffset;
-        updateCosmicGuy(cosmicGuy, wanderElapsed, camera);
+        const scrollProgress = getScrollProgress();
+
+        updateCosmicGuy(cosmicGuy, wanderElapsed, camera, scrollProgress);
     }
 
 }
 
 guyLoop();
 
-// --------------------
-// Start main animation
-// --------------------
+
 
 animate(renderer, scene, camera, sphere, textGroup, state);
 
-// --------------------
-// Resize
-// --------------------
+
 
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;

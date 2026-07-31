@@ -1,82 +1,418 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KRINFUD DIGITALS</title>
 
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<title>KRINFUD DIGITALS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/sections.css">
 
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/hero.css">
-
-<script type="importmap">
-{
-  "imports": {
-    "three":"https://unpkg.com/three@0.166.1/build/three.module.js",
-    "troika-three-text":"https://unpkg.com/troika-three-text@0.52.4/dist/troika-three-text.esm.js",
-    "three/addons/":"https://unpkg.com/three@0.166.1/examples/jsm/"
+  <script type="importmap">
+  {
+    "imports": {
+      "three":"https://unpkg.com/three@0.166.1/build/three.module.js",
+      "troika-three-text":"https://unpkg.com/troika-three-text@0.52.4/dist/troika-three-text.esm.js",
+      "three/addons/":"https://unpkg.com/three@0.166.1/examples/jsm/"
+    }
   }
-}
-</script>
-
+  </script>
 </head>
 
 <body>
 
-<header>
+  <header>
+    <nav>
+      <div class="logo">KRINFUD <span>DIGITALS</span></div>
+      <div class="menu">
+        <a href="#">Services</a>
+        <a href="#">Work</a>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <button>Connect</button>
+      </div>
+    </nav>
+  </header>
 
-<nav>
+  <section id="hero">
+    <div id="three-container"></div>
+    
+    <!-- Brand Universe Planets -->
+    <div class="brand-universe">
+      <a href="events.html" class="side-planet planet-events">
+        <div class="planet-visual">
+          <div class="planet-ring"></div>
+          <div class="planet-sphere"></div>
+        </div>
+        <span class="planet-label">Events</span>
+      </a>
+      
+      <a href="creatives.html" class="side-planet planet-creatives">
+        <div class="planet-visual">
+          <div class="planet-ring"></div>
+          <div class="planet-sphere"></div>
+        </div>
+        <span class="planet-label">Creatives</span>
+      </a>
+    </div>
+    
+    <div class="hero-content">
+      <p class="tagline">Digital Marketing Agency in Ethiopia</p>
+    </div>
+    
+    <div class="scroll-down">
+      <span>Scroll</span>
+    </div>
+  </section>
 
-<div class="logo">
-KRINFUD
-<span>DIGITALS</span>
-</div>
+  <section id="about" class="stripe">
+    <div class="stripe-inner reveal">
+      <span class="eyebrow">Krinfud &nbsp;•&nbsp; Be where the world is going</span>
+      <h2 class="stripe-title">Who We Are</h2>
+      <p class="stripe-quote">"Profound Difference Through Meaning — Full Changes"</p>
+      <p class="stripe-text">
+        KRINFUD is a full-service marketing agency based in Ethiopia since 2019, built by a passionate team of creative thinkers, developers, designers, animators, photographers and content creators.
+      </p>
+      <p class="stripe-text italic">
+        We look at ourselves more like an investment firm than a marketing agency.
+      </p>
+      <p class="stripe-text">
+        Headquartered in Addis Ababa, we've helped over 50 brands reach the right customer, increase exposure, surpass competitors and drive sales their way.
+      </p>
+    </div>
+  </section>
 
-<div class="menu">
+  <section id="why" class="stripe">
+    <div class="stripe-inner reveal">
+      <div class="why-grid">
+        <div class="why-image">
+          <img src="images/whyus.png" alt="Why Krinfud">
+        </div>
+        <div class="why-content">
+          <h2 class="stripe-title">Why Krinfud?</h2>
+          <p class="stripe-quote">"We make it look easy"</p>
+          <p class="stripe-text">
+            With international and local experts, our team blends strategists and pragmatists with an extensive network across Africa. Amongst our crew are marketing strategists with international experience across tech and advertising. We leverage exclusive privileges, connections and resources to offer unmatched quality.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<a href="#">Services</a>
-<a href="#">Work</a>
-<a href="#">About</a>
-<a href="#">Blog</a>
+  <!-- A-Z: Laptop Showcase with Individual Cursor-Following Tilt -->
+  <section id="az" class="stripe">
+    <div class="stripe-inner reveal" style="max-width: 100%;">
+      <div class="az-laptop-showcase">
+        <h2 class="az-showcase-title">We Are <span class="gold-text">A–Z.</span></h2>
+        <p class="az-showcase-subtitle">
+          One point of contact to cater to your marketing needs — whether assessment, ideation, strategizing, execution, monitoring or evaluation.
+        </p>
 
-<button>Connect</button>
+        <div class="laptop-grid" id="laptopGrid">
+          <div class="laptop-card" data-base-rotate="-3" data-base-tilt="4">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Market Research">
+                <div class="screen-overlay">
+                  <span class="service-num">01</span>
+                  <h3>Market Research</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
 
-</div>
+          <div class="laptop-card" data-base-rotate="2" data-base-tilt="-3">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80" alt="Event Management">
+                <div class="screen-overlay">
+                  <span class="service-num">02</span>
+                  <h3>Event Management</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
 
-</nav>
+          <div class="laptop-card" data-base-rotate="-2" data-base-tilt="5">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80" alt="Media Buying">
+                <div class="screen-overlay">
+                  <span class="service-num">03</span>
+                  <h3>Media Buying</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
 
-</header>
+          <div class="laptop-card" data-base-rotate="3" data-base-tilt="-4">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80" alt="Media Production">
+                <div class="screen-overlay">
+                  <span class="service-num">04</span>
+                  <h3>Media Production</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
 
-<section id="hero">
+          <div class="laptop-card" data-base-rotate="-1" data-base-tilt="3">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&q=80" alt="Digital Marketing">
+                <div class="screen-overlay">
+                  <span class="service-num">05</span>
+                  <h3>Digital Marketing</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
 
-<div id="three-container"></div>
+          <div class="laptop-card" data-base-rotate="2" data-base-tilt="-5">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1561070791-2526d30994b8?w=800&q=80" alt="Brand Development">
+                <div class="screen-overlay">
+                  <span class="service-num">06</span>
+                  <h3>Brand Development</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
 
-<div class="hero-content">
-<p class="tagline">Digital Marketing Agency in Ethiopia</p>
-</div>
+          <div class="laptop-card" data-base-rotate="-2" data-base-tilt="2">
+            <div class="laptop-frame">
+              <div class="laptop-screen">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80" alt="ATL and BTL">
+                <div class="screen-overlay">
+                  <span class="service-num">07</span>
+                  <h3>ATL &amp; BTL</h3>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="scroll-down">
-<span>Scroll</span>
-<div class="line"></div>
-</div>
+  <!-- INVEST: Massive Background Text -->
+  <section id="invest" class="stripe">
+    <div class="stripe-inner reveal">
+      <div class="invest-flowy">
+        <span class="invest-eyebrow">We Invest In</span>
+        
+        <div class="invest-composition">
+          <h2 class="invest-huge-text">KNOWING</h2>
+          
+          <div class="invest-glass-card">
+            <p>
+              We put in the effort to know before we act, to guarantee you the most value for your investment. For each task, we perform a thoughtful assessment, do sufficient research and rely on solid insights, without compromising agility.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-</section>
+  <section id="process" class="stripe">
+    <div class="stripe-inner reveal">
+      <span class="eyebrow">HOW WE DO IT</span>
+      <h2 class="stripe-title">The Krinfud Way</h2>
+      <p class="stripe-text">
+        Honesty in delivering assessments, setting goals, executing tasks, monitoring performance, evaluating progress and learning from experience.
+      </p>
 
-<script type="module" src="js/hero.js"></script>
+      <div class="process-pills">
+        <svg class="process-connections" viewBox="0 0 1000 400" preserveAspectRatio="none">
+          <path class="connection-line" d="M 250,40 L 700,40" />
+          <path class="connection-line" d="M 700,40 Q 700,120 550,160" />
+          <path class="connection-line" d="M 480,180 Q 400,200 280,240" />
+          <path class="connection-line" d="M 320,260 Q 500,280 720,300" />
+          <path class="connection-line" d="M 680,320 Q 600,340 520,350" />
+        </svg>
+
+        <div class="process-pill" style="--delay: 0s;" data-pill="1"><span>Defining</span></div>
+        <div class="process-pill" style="--delay: 0.1s;" data-pill="2"><span>Diagnosing</span></div>
+        <div class="process-pill" style="--delay: 0.2s;" data-pill="3"><span>Designing</span></div>
+        <div class="process-pill" style="--delay: 0.3s;" data-pill="4"><span>Demonstrating</span></div>
+        <div class="process-pill" style="--delay: 0.4s;" data-pill="5"><span>Deploying</span></div>
+        <div class="process-pill" style="--delay: 0.5s;" data-pill="6"><span>Delivering</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="stripe">
+    <div class="stripe-inner reveal">
+      <h2 class="stripe-title">Every Channel, <br>One Team Behind It</h2>
+      <p class="stripe-text">
+        360° marketing, brand management and digital strategy — one point of contact for everything your brand needs to grow.
+      </p>
+
+      <div class="services-grid">
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud1/600/800" alt="Team member"></div>
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud4/600/800" alt="Team member"></div>
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud5/600/800" alt="Team member"></div>
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud6/600/800" alt="Team member"></div>
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud7/600/800" alt="Team member"></div>
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud9/600/800" alt="Team member"></div>
+        <div class="service-card"><img src="https://picsum.photos/seed/krinfud10/600/800" alt="Team member"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="showcase" class="stripe">
+    <div class="stripe-inner reveal">
+      <h3 class="stripe-title small">Our Works</h3>
+      <h2 class="stripe-title big">Selected Work</h2>
+
+      <div class="showcase-grid">
+        <div class="showcase-card">
+          <div class="showcase-media" style="background-image:url('images/work/showcase-1.jpg')"></div>
+          <div class="showcase-caption">
+            <h4>Fragrance Brand Campaign</h4>
+            <p>Social media content &amp; brand launch strategy</p>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-media" style="background-image:url('images/work/showcase-2.jpg')"></div>
+          <div class="showcase-caption">
+            <h4>360° Brand Identity</h4>
+            <p>Branding, packaging &amp; digital presence</p>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-media" style="background-image:url('images/work/showcase-3.jpg')"></div>
+          <div class="showcase-caption">
+            <h4>Digital Marketing Push</h4>
+            <p>Paid media, content &amp; growth strategy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="partners" class="stripe">
+    <div class="stripe-inner reveal">
+      <h3 class="stripe-title small">Trusted By</h3>
+      <h2 class="stripe-title big">Our Partners</h2>
+    </div>
+
+    <div class="partners-marquee">
+      <div class="partners-track" id="partnersTrack">
+        <div class="partner-circle"><img src="images/partners/duka.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/yanet.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/tobia.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/hey.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/need.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/surreal.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/duka.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/yanet.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/tobia.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/hey.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/need.png" alt="Partner logo"></div>
+        <div class="partner-circle"><img src="images/partners/surreal.png" alt="Partner logo"></div>
+      </div>
+    </div>
+    <div class="partners-dots" id="partnersDots"></div>
+  </section>
+
+  <footer id="contact" class="site-footer">
+    <div class="footer-inner reveal">
+      <div class="footer-brand">
+        <div class="logo">KRINFUD <span>DIGITALS</span></div>
+        <p>Digital Marketing Agency in Ethiopia</p>
+      </div>
+      <div class="footer-cta">
+        <p>Ready to grow your brand?</p>
+        <a href="mailto:hello@krinfud.com" class="footer-btn">Get In Touch</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Krinfud Digitals. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script type="module" src="js/hero.js"></script>
+  <script type="module" src="js/scroll.js"></script>
+
+  <!-- Individual Cursor-Following Tilt for Each Laptop -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const laptopCards = document.querySelectorAll('.laptop-card');
+      if (laptopCards.length === 0) return;
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      const laptopStates = Array.from(laptopCards).map(() => ({
+        currentX: 0,
+        currentY: 0,
+        targetX: 0,
+        targetY: 0
+      }));
+
+      function animate() {
+        laptopCards.forEach((card, index) => {
+          const rect = card.getBoundingClientRect();
+          const cardCenterX = rect.left + rect.width / 2;
+          const cardCenterY = rect.top + rect.height / 2;
+
+          const deltaX = mouseX - cardCenterX;
+          const deltaY = mouseY - cardCenterY;
+
+          const maxDist = Math.max(window.innerWidth, window.innerHeight) / 2;
+          const normX = deltaX / maxDist;
+          const normY = deltaY / maxDist;
+
+          const clampedX = Math.max(-1, Math.min(1, normX));
+          const clampedY = Math.max(-1, Math.min(1, normY));
+
+          const maxTilt = 22;
+          const targetRotateY = clampedX * maxTilt;
+          const targetRotateX = -clampedY * maxTilt;
+
+          const state = laptopStates[index];
+          state.targetX = targetRotateX;
+          state.targetY = targetRotateY;
+          state.currentX += (state.targetX - state.currentX) * 0.18;
+          state.currentY += (state.targetY - state.currentY) * 0.18;
+
+          const baseRotate = parseFloat(card.getAttribute('data-base-rotate')) || 0;
+          const baseTilt = parseFloat(card.getAttribute('data-base-tilt')) || 0;
+
+          card.style.transform = `
+            perspective(1200px)
+            rotateZ(${baseRotate}deg)
+            rotateX(${state.currentX + baseTilt * 0.3}deg)
+            rotateY(${state.currentY}deg)
+          `;
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    });
+  </script>
 
 </body>
-
 </html>

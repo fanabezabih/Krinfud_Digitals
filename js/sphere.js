@@ -2,22 +2,26 @@ import * as THREE from "three";
 
 const GOLD = "#B8860B";
 
-// --------------------
-// List your PNG icon filenames here (relative to images/icons/).
-// Replace these placeholder names with your actual exported files.
-// Transparent-background PNGs work best.
-// --------------------
 const ICON_FILES = [
+
     "vector1.png",
     "vector2.png",
     "vector3.png",
     "vector4.png",
     "vector5.png",
-    "vector2.png",
-    "vector2.png",
-    "vector2.png",
-    "vector2.png",
-    "vector2.png",
+    "vector6.png",
+    "vector7.png",
+    "vector8.png",
+    "vector9.png",
+    "vector10.png",
+    "vector11.png",
+    "vector12.png",
+    "vector9.png",
+    "vector9.png",
+    "vector9.png",
+    "vector9.png",
+
+
 ];
 
 const ICON_PATH = "images/";
@@ -95,10 +99,9 @@ async function createIconTexture() {
 }
 
 export function createSphere(scene) {
-    const geometry = new THREE.SphereGeometry(2, 64, 64);
+const geometry = new THREE.SphereGeometry(1.6, 64, 64);
 
-    // Start with a plain gold material so the sphere is visible immediately;
-    // swap in the icon texture once the PNGs finish loading.
+  
     const material = new THREE.MeshStandardMaterial({
         color: GOLD,
         roughness: 0.55,
@@ -110,7 +113,7 @@ export function createSphere(scene) {
 
     createIconTexture().then((texture) => {
         material.map = texture;
-        material.color.set(0xffffff); // let the texture show its true colors
+        material.color.set(0xffffff); 
         material.needsUpdate = true;
     });
 

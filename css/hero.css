@@ -1,180 +1,277 @@
-header{
-
-position:absolute;
-
-top:0;
-
-left:0;
-
-width:100%;
-
-z-index:20;
-
-padding:30px 60px;
-
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+    padding: 30px 60px;
 }
 
-nav{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.logo{
-
-font-size:28px;
-
-font-weight:800;
-
+.logo {
+    font-size: 28px;
+    font-weight: 800;
 }
 
-.logo span{
-
-font-weight:300;
-color: var(--gold);
-
+.logo span {
+    font-weight: 300;
+    color: var(--gold);
 }
 
-.menu{
-
-display:flex;
-
-align-items:center;
-
-gap:45px;
-
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 45px;
 }
 
-.menu button{
-
-padding:14px 28px;
-
-background: var(--maroon);
-
-color:white;
-
-border-radius:10px;
-
-font-size:15px;
-
-transition: background 0.3s;
-
+.menu button {
+    padding: 14px 28px;
+    background: var(--maroon);
+    color: white;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: background 0.3s;
 }
 
-.menu button:hover{
-
-background: var(--gold);
-color: var(--bg-dark);
-
+.menu button:hover {
+    background: var(--gold);
+    color: var(--bg-dark);
 }
 
-#hero{
+/* ==========================================
+   HERO SECTION
+========================================== */
 
-position:relative;
-
-width:100vw;
-
-height:100vh;
-
-overflow:hidden;
-
-background-image:
-    radial-gradient(ellipse at center, rgba(26,10,10,0.55) 0%, rgba(26,10,10,0.92) 100%),
-    linear-gradient(180deg, rgba(26,10,10,0.6) 0%, rgba(26,10,10,0.3) 50%, rgba(0,0,0,0.95) 100%),
-    url("../images/krinfudlogo.png");
-
-background-size: cover;
-
-background-position: center;
-
-background-color: var(--bg-dark);
-
+#hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-image:
+        radial-gradient(ellipse at center, rgba(42,26,26,0.55) 0%, rgba(42,26,26,0.92) 100%),
+        linear-gradient(180deg, rgba(42,26,26,0.6) 0%, rgba(42,26,26,0.3) 50%, rgba(0,0,0,0.95) 100%),
+        url("../images/krinfudlogo.png");
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg-dark);
 }
 
-#three-container{
-
-position:absolute;
-
-inset:0;
-
+#three-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
 }
 
-.hero-content{
-
-position:absolute;
-
-bottom:18%;
-
-left:0;
-
-width:100%;
-
-z-index:5;
-
-text-align:center;
-
-pointer-events:none;
-
+.hero-content {
+    position: absolute;
+    bottom: 18%;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    text-align: center;
+    pointer-events: none;
 }
 
-.tagline{
-
-font-size:14px;
-
-letter-spacing:0.35em;
-
-text-transform:uppercase;
-
-color: var(--text-muted);
-
-font-weight:400;
-
-opacity:0.85;
-
+.tagline {
+    font-size: 14px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 400;
+    opacity: 0.85;
 }
 
-.scroll-down{
-
-position:absolute;
-
-bottom:1.5rem;
-
-left:50%;
-
-transform:translateX(-50%);
-
-z-index:10;
-
-color: var(--text-muted);
-
-font-size:0.7rem;
-
-letter-spacing:0.25em;
-
-text-transform:uppercase;
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-gap:0.6rem;
-
-opacity:0.6;
-
+.scroll-down {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    opacity: 0.6;
 }
 
-.scroll-down .line{
+.scroll-down .line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+}
 
-width:1px;
+/* ==========================================
+   BRAND UNIVERSE - 3D TILTED SATURN PLANETS (REDUCED SIZE)
+========================================== */
 
-height:50px;
+.brand-universe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
 
-background:linear-gradient(to bottom, var(--gold), transparent);
+.side-planet {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22, 0.9, 0.28, 1);
+    animation: float-planet 6s ease-in-out infinite;
+}
 
+.side-planet:hover {
+    transform: scale(1.15);
+}
+
+/* Positioning: Events lower, Creatives higher */
+.planet-events {
+    top: 58%; 
+    left: 6%;
+    animation-delay: 0s;
+}
+
+.planet-creatives {
+    top: 42%; 
+    right: 6%;
+    animation-delay: 3s;
+}
+
+@keyframes float-planet {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+/* 3D Container for the planet - REDUCED FROM 100px to 70px */
+.planet-visual {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* The Planet Sphere */
+.planet-sphere {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    transform: translateZ(20px); 
+    z-index: 2;
+    transition: box-shadow 0.4s ease;
+}
+
+/* Events Sphere - Gold/Maroon */
+.planet-events .planet-sphere {
+    background: radial-gradient(circle at 30% 30%, #D4A843, #8B2635);
+    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6);
+}
+
+/* Creatives Sphere - Dark Gold/Brown */
+.planet-creatives .planet-sphere {
+    background: radial-gradient(circle at 30% 30%, #B8860B, #1a0f0f);
+    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.7);
+}
+
+.side-planet:hover .planet-sphere {
+    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6), 0 0 30px rgba(212, 168, 67, 0.5);
+}
+
+/* The Saturn Ring - REDUCED FROM 190px to 130px */
+.planet-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    margin-top: -65px;
+    margin-left: -65px;
+    
+    /* Thinner borders for smaller size */
+    border: 4px solid rgba(212, 168, 67, 0.85);
+    box-shadow: 
+        0 0 0 2px rgba(139, 38, 53, 0.5), 
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2); 
+    
+    transform: rotateX(75deg) rotateZ(-20deg);
+}
+
+/* Theme colors for rings */
+.planet-events .planet-ring {
+    border-color: rgba(212, 168, 67, 0.9);
+    box-shadow: 
+        0 0 0 3px rgba(139, 38, 53, 0.6), 
+        inset 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+.planet-creatives .planet-ring {
+    border-color: rgba(184, 134, 11, 0.9);
+    box-shadow: 
+        0 0 0 3px rgba(42, 26, 26, 0.8), 
+        inset 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+/* Planet Label */
+.planet-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: rgba(42, 26, 26, 0.85);
+    backdrop-filter: blur(8px);
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(184, 134, 11, 0.3);
+    transition: all 0.4s ease;
+    z-index: 5;
+}
+
+.side-planet:hover .planet-label {
+    background: rgba(42, 26, 26, 0.95);
+    border-color: rgba(212, 168, 67, 0.6);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+    .planet-events { left: 4%; top: 55%; }
+    .planet-creatives { right: 4%; top: 45%; }
+    
+    .planet-visual { width: 60px; height: 60px; }
+    .planet-ring { width: 110px; height: 110px; margin-top: -55px; margin-left: -55px; }
+}
+
+@media (max-width: 768px) {
+    .planet-events { left: 2%; top: 52%; }
+    .planet-creatives { right: 2%; top: 48%; }
+    
+    .planet-visual { width: 50px; height: 50px; }
+    .planet-ring { width: 90px; height: 90px; margin-top: -45px; margin-left: -45px; border-width: 3px; }
+    .planet-label { font-size: 10px; padding: 6px 14px; }
+}
+
+@media (max-width: 480px) {
+    .side-planet { display: none; }
 }
