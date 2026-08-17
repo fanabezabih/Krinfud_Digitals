@@ -5,7 +5,8 @@ export function createTextEngine(scene) {
 
     const group = new THREE.Group();
 
-    const RADIUS = 3.6;
+    // REDUCED RADIUS: Changed from 3.6 to 2.8 to bring text closer and reduce gaps
+    const RADIUS = 3.5; 
 
     const texture = createTextTexture();
 

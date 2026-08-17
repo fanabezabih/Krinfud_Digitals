@@ -33,6 +33,10 @@ button {
     cursor: pointer;
 }
 
+/* ==========================================
+   CUSTOM CURSOR
+========================================== */
+
 .cursor-dot {
     width: 8px; 
     height: 8px;
@@ -130,17 +134,19 @@ nav {
 }
 
 /* ==========================================
-   HERO SECTION WITH BACKGROUND
+   HERO SECTION (DIMMED & TALLER)
 ========================================== */
 
 #hero {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 110vh; /* Taller to show more background */
     overflow: hidden;
+    
     background-image: 
-        radial-gradient(ellipse at center, rgba(26,10,10,0.4) 0%, rgba(26,10,10,0.7) 100%),
+        radial-gradient(ellipse at center, rgba(26,10,10,0.65) 0%, rgba(26,10,10,0.88) 100%),
         url('../images/krinfudlogo.png');
+        
     background-size: cover;
     background-position: center;
     background-color: var(--bg-dark);
@@ -167,9 +173,10 @@ nav {
     font-size: 14px;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: #ffffff; /* Changed to white */
     font-weight: 400;
-    opacity: 0.85;
+    opacity: 0.9;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .scroll-down {
@@ -196,7 +203,7 @@ nav {
 }
 
 /* ==========================================
-   BRAND UNIVERSE - PLANETS (HIDDEN INITIALLY, REVEALED BY JS)
+   BRAND UNIVERSE - PLANETS
 ========================================== */
 
 .brand-universe {
@@ -208,13 +215,11 @@ nav {
     z-index: 3;
     pointer-events: none;
     
-    /* HIDDEN INITIALLY - Will be shown by JavaScript after intro */
     opacity: 0;
     visibility: hidden;
     transition: opacity 1.2s ease, visibility 1.2s ease;
 }
 
-/* This class is added by JS when the world is delivered */
 .brand-universe.planets-visible {
     opacity: 1;
     visibility: visible;
@@ -238,7 +243,6 @@ nav {
     transform: scale(1.15);
 }
 
-/* Positioning: Events lower, Creatives higher */
 .planet-events {
     top: 58%; 
     left: 6%;
@@ -256,7 +260,6 @@ nav {
     50% { transform: translateY(-15px); }
 }
 
-/* 3D Container for the planet */
 .planet-visual {
     position: relative;
     width: 70px;
@@ -265,7 +268,6 @@ nav {
     perspective: 1000px;
 }
 
-/* The Planet Sphere */
 .planet-sphere {
     position: absolute;
     inset: 0;
@@ -281,17 +283,22 @@ nav {
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6);
 }
 
-/* Creatives Sphere - Dark Gold/Brown */
+/* Creatives Sphere - NOW BRIGHTER (Light Gold / Warm Maroon) */
 .planet-creatives .planet-sphere {
-    background: radial-gradient(circle at 30% 30%, #B8860B, #1a0f0f);
-    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.7);
+    background: radial-gradient(circle at 30% 30%, #E8C56D, #8B2635);
+    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.5);
 }
 
+/* Generic Hover Glow */
 .side-planet:hover .planet-sphere {
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6), 0 0 30px rgba(212, 168, 67, 0.5);
 }
 
-/* The Saturn Ring - Tilted and Rough */
+/* Specific Brighter Hover Glow for Creatives */
+.planet-creatives:hover .planet-sphere {
+    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.5), 0 0 30px rgba(232, 197, 109, 0.6);
+}
+
 .planet-ring {
     position: absolute;
     top: 50%;
@@ -310,7 +317,6 @@ nav {
     transform: rotateX(75deg) rotateZ(-20deg);
 }
 
-/* Theme colors for rings */
 .planet-events .planet-ring {
     border-color: rgba(212, 168, 67, 0.9);
     box-shadow: 
@@ -319,13 +325,12 @@ nav {
 }
 
 .planet-creatives .planet-ring {
-    border-color: rgba(184, 134, 11, 0.9);
+    border-color: rgba(232, 197, 109, 0.9); /* Brighter ring to match */
     box-shadow: 
-        0 0 0 3px rgba(42, 26, 26, 0.8), 
-        inset 0 0 0 3px rgba(255, 255, 255, 0.15);
+        0 0 0 3px rgba(139, 38, 53, 0.6), 
+        inset 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
-/* Planet Label */
 .planet-label {
     font-size: 11px;
     font-weight: 700;
