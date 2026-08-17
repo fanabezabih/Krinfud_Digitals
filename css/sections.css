@@ -159,18 +159,18 @@ button {
 }
 
 /* ==========================================
-   WHY KRINFUD (FIXED: MOVED OUTSIDE MEDIA QUERY)
+   WHY KRINFUD
 ========================================== */
 
 #why .stripe-inner {
-    max-width: 1400px; /* Makes the container wider on desktop */
+    max-width: 1400px;
 }
 
 .why-grid {
     display: grid;
-    grid-template-columns: 500px 1fr; /* Wider image column */
+    grid-template-columns: 500px 1fr;
     align-items: center;
-    gap: 150px; /* Increased gap between image and text */
+    gap: 150px;
 }
 
 .why-image {
@@ -181,7 +181,7 @@ button {
 
 .why-image img {
     width: 100%;
-    max-width: 450px; /* Controls actual image size */
+    max-width: 450px;
     height: auto;
     display: block;
 }
@@ -624,30 +624,68 @@ button {
 }
 
 /* ==========================================
-   PARTNERS CAROUSEL
+   PARTNERS CAROUSEL (UPDATED FADE & CENTERING)
 ========================================== */
+
+#partners {
+    position: relative;
+}
+
+/* When scroll is locked, center everything perfectly */
+#partners.scroll-locked {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 10;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centers content horizontally */
+}
+
+#partners.scroll-locked .stripe-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#partners.scroll-locked .stripe-title {
+    text-align: center;
+}
 
 .partners-marquee {
     position: relative;
     max-width: 1000px;
-    margin: 56px auto 0;
+    width: 100%;
+    margin: 0 auto;
     padding: 24px 40px 24px 0;
     overflow-x: auto;
     overflow-y: hidden;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(to right, black 92%, transparent);
-    mask-image: linear-gradient(to right, black 92%, transparent);
+    
+    /* UPDATED: Soft fade on both left and right edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, white 15%, white 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, white 15%, white 85%, transparent);
+    
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .partners-marquee::-webkit-scrollbar { display: none; }
+.partners-marquee:active { cursor: grabbing; }
 
 .partners-track {
     display: flex;
     align-items: center;
     width: max-content;
     gap: 40px;
+    padding-right: 40px;
 }
 
 .partner-circle {
@@ -660,7 +698,6 @@ button {
     align-items: center;
     justify-content: center;
     padding: 22px;
-    scroll-snap-align: start;
     box-shadow: 0 12px 28px rgba(0,0,0,0.4), 0 0 0 1px rgba(184,134,11,0.12);
     transition: transform 0.35s cubic-bezier(0.22,0.9,0.28,1), box-shadow 0.35s ease;
 }
@@ -702,6 +739,31 @@ button {
     transform: scale(1.35);
 }
 
+/* Scroll hint indicator */
+#partners::after {
+    content: '← Scroll to explore partners →';
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 10;
+    background: rgba(42, 26, 26, 0.85);
+    padding: 10px 24px;
+    border-radius: 30px;
+    border: 1px solid rgba(184, 134, 11, 0.3);
+}
+
+#partners.scroll-locked::after {
+    opacity: 0.8;
+}
+
 /* ==========================================
    FOOTER
 ========================================== */
@@ -710,6 +772,8 @@ button {
     background: var(--bg-dark);
     padding: 80px 60px 30px;
     border-top: 1px solid rgba(184,134,11,0.12);
+    position: relative;
+    z-index: 1;
 }
 
 .footer-inner {
@@ -788,7 +852,6 @@ button {
    SECTION GAP ADJUSTMENTS
 ========================================== */
 
-/* Reduce gap between About & Why sections */
 #about.stripe {
     padding-bottom: 60px;
 }
@@ -797,7 +860,6 @@ button {
     padding-top: 60px;
 }
 
-/* Reduce gap between Invest & Process sections */
 #invest.stripe {
     padding-bottom: 40px;
 }
@@ -825,13 +887,11 @@ button {
     .footer-inner { flex-direction: column; text-align: center; }
     .footer-cta { text-align: center; }
 
-    /* About Section Responsive */
     #about .stripe-inner {
         margin-left: 0;
         max-width: 100%;
     }
 
-    /* Why Krinfud Responsive */
     .why-grid {
         grid-template-columns: 1fr;
         gap: 60px;
@@ -898,6 +958,13 @@ button {
     .process-pill:nth-child(6) { bottom: 20%; right: 10%; }
     .process-pill:nth-child(7) { bottom: 5%; left: 35%; }
     .connection-line { stroke-width: 1; }
+
+    /* Disable sticky lock on smaller screens */
+    #partners.scroll-locked {
+        position: relative;
+        height: auto;
+        z-index: 1;
+    }
 }
 
 @media (max-width: 900px) {

@@ -1,114 +1,172 @@
-/* ==========================================
-   KRINFUD DIGITALS
-   SCROLL ANIMATIONS
-========================================== */
-
-// Prevent the browser from restoring the previous scroll position on
-// refresh — always start fresh at the top of the page instead.
-if ("scrollRestoration" in history) {
-    history.scrollRestoration = "manual";
+// ==========================================
+// FORCE SCROLL TO TOP ON REFRESH
+// ==========================================
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
 }
 window.scrollTo(0, 0);
 
-const revealElements = document.querySelectorAll(".reveal");
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            observer.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.15 });
+// ==========================================
+// SMOOTH SCROLL REVEAL ANIMATIONS
+// ==========================================
 
-revealElements.forEach((el) => observer.observe(el));
+document.addEventListener('DOMContentLoaded', function() {
+    const reveals = document.querySelectorAll('.reveal');
 
-/* ==========================================
-   PARTNERS CAROUSEL — dot navigation
-========================================== */
+    const revealOnScroll = () => {
+        const windowHeight = window.innerHeight;
+        const elementVisible = 100;
 
-function initPartnersCarousel() {
-    const track = document.getElementById("partnersTrack");
-    const dotsContainer = document.getElementById("partnersDots");
-    if (!track || !dotsContainer) return;
-
-    const items = Array.from(track.children);
-    const marquee = document.querySelector(".partners-marquee");
-
-    // Each dot represents a PAGE of logos, not a single logo — so
-    // clicking dot 2 jumps forward by a full group instead of moving
-    // to just the 2nd logo. Change this to move to a different page size.
-    const ITEMS_PER_PAGE = 4;
-
-    // The "anchor" for each page is its first logo — that's the one we
-    // scroll into view, and the one we watch to know which page is
-    // currently in view.
-    const anchors = items.filter((_, i) => i % ITEMS_PER_PAGE === 0);
-
-    // While a click-triggered scroll is in progress, ignore the
-    // IntersectionObserver's updates so it can't fight with (or
-    // momentarily revert) the dot the user just clicked.
-    let isClickScrolling = false;
-    let clickScrollTimeout = null;
-
-    function setActiveDot(index) {
-        dots.forEach((d) => d.classList.remove("active"));
-        if (dots[index]) dots[index].classList.add("active");
-    }
-
-    anchors.forEach((anchor, pageIndex) => {
-        const dot = document.createElement("button");
-        dot.type = "button";
-        dot.className = "partners-dot";
-        dot.setAttribute("aria-label", `Go to partners ${pageIndex * ITEMS_PER_PAGE + 1}-${Math.min((pageIndex + 1) * ITEMS_PER_PAGE, items.length)}`);
-        dot.addEventListener("click", () => {
-            // Update immediately on click — filled dot always matches
-            // the page just clicked, first, with no lag or flicker.
-            setActiveDot(pageIndex);
-
-            isClickScrolling = true;
-            clearTimeout(clickScrollTimeout);
-
-            // Compute the target scroll position ourselves instead of
-            // using scrollIntoView. scrollIntoView tries to force the
-            // anchor to the exact left edge even when there isn't enough
-            // trailing track left to do that (e.g. the last page) — the
-            // mandatory scroll-snap then settles at max-scroll, which
-            // lands between snap points and visually slices a logo in
-            // half. Clamping to the real max scroll instead always shows
-            // a full, uncut set of logos, even on the last page.
-            const marqueeRect = marquee.getBoundingClientRect();
-            const anchorRect = anchor.getBoundingClientRect();
-            const rawTarget = marquee.scrollLeft + (anchorRect.left - marqueeRect.left);
-            const maxScroll = marquee.scrollWidth - marquee.clientWidth;
-            const target = Math.max(0, Math.min(rawTarget, maxScroll));
-
-            marquee.scrollTo({ left: target, behavior: "smooth" });
-
-            // Resume letting scroll position drive the active dot once
-            // the smooth-scroll animation has had time to finish.
-            clickScrollTimeout = setTimeout(() => {
-                isClickScrolling = false;
-            }, 700);
-        });
-        dotsContainer.appendChild(dot);
-    });
-
-    const dots = Array.from(dotsContainer.children);
-    setActiveDot(0);
-
-    const dotObserver = new IntersectionObserver((entries) => {
-        if (isClickScrolling) return;
-
-        entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
-                const pageIndex = anchors.indexOf(entry.target);
-                if (pageIndex !== -1) setActiveDot(pageIndex);
+        reveals.forEach((reveal) => {
+            const elementTop = reveal.getBoundingClientRect().top;
+            if (elementTop < windowHeight - elementVisible) {
+                reveal.classList.add('in-view');
             }
         });
-    }, { root: marquee, threshold: [0.6] });
+    };
 
-    anchors.forEach((anchor) => dotObserver.observe(anchor));
-}
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+});
 
-initPartnersCarousel();
+
+// ==========================================
+// PARTNERS SECTION - SMOOTH HORIZONTAL SCROLL HIJACK + DOTS
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const partnersSection = document.getElementById('partners');
+    const partnersMarquee = document.querySelector('.partners-marquee');
+    const partnersTrack = document.getElementById('partnersTrack');
+    const partnersDotsContainer = document.getElementById('partnersDots');
+    const footer = document.querySelector('.site-footer');
+
+    if (partnersSection && partnersMarquee && partnersTrack && partnersDotsContainer) {
+        
+        let targetScrollX = 0;
+        let currentScrollX = 0;
+        let maxScroll = 0;
+        let isAnimating = false;
+        let isLocked = false;
+        const lerpFactor = 0.12;
+        
+        // We have 6 unique partners in the HTML
+        const numDots = 6; 
+
+        function calculateMaxScroll() {
+            maxScroll = partnersTrack.scrollWidth - partnersMarquee.clientWidth;
+            if (maxScroll < 0) maxScroll = 0;
+        }
+
+        calculateMaxScroll();
+        window.addEventListener('resize', () => {
+            calculateMaxScroll();
+            updateDots(); // Recalculate dot positions on resize
+        });
+
+        // Generate Navigation Dots
+        function generateDots() {
+            partnersDotsContainer.innerHTML = ''; // Clear existing
+            for (let i = 0; i < numDots; i++) {
+                const dot = document.createElement('button');
+                dot.classList.add('partners-dot');
+                if (i === 0) dot.classList.add('active');
+                dot.setAttribute('aria-label', `Go to partner group ${i + 1}`);
+                
+                dot.addEventListener('click', () => {
+                    const stepWidth = maxScroll / (numDots - 1);
+                    targetScrollX = stepWidth * i;
+                    
+                    if (!isAnimating) {
+                        isAnimating = true;
+                        requestAnimationFrame(smoothScrollLoop);
+                    }
+                });
+                
+                partnersDotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update active dot based on current scroll position
+        function updateDots() {
+            const stepWidth = maxScroll / (numDots - 1);
+            const activeIndex = Math.round(currentScrollX / stepWidth);
+            const dots = partnersDotsContainer.querySelectorAll('.partners-dot');
+            
+            dots.forEach((dot, index) => {
+                if (index === activeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        generateDots();
+
+        // Smooth animation loop
+        function smoothScrollLoop() {
+            currentScrollX += (targetScrollX - currentScrollX) * lerpFactor;
+            currentScrollX = Math.max(0, Math.min(maxScroll, currentScrollX));
+            
+            partnersMarquee.scrollLeft = currentScrollX;
+            
+            // Update dots during animation
+            updateDots();
+
+            // Check if we've reached the end
+            const atEnd = currentScrollX >= maxScroll - 2;
+            
+            if (atEnd && isLocked) {
+                isLocked = false;
+                partnersSection.classList.remove('scroll-locked');
+            }
+
+            if (Math.abs(targetScrollX - currentScrollX) > 0.5) {
+                requestAnimationFrame(smoothScrollLoop);
+            } else {
+                currentScrollX = targetScrollX;
+                partnersMarquee.scrollLeft = currentScrollX;
+                updateDots(); // Final snap to correct dot
+                isAnimating = false;
+            }
+        }
+
+        // Global scroll listener to detect when we enter/exit partners section
+        window.addEventListener('scroll', function() {
+            const rect = partnersSection.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            const isInViewport = rect.top < viewportHeight && rect.bottom > 0;
+            
+            if (isInViewport && currentScrollX < maxScroll) {
+                if (!isLocked) {
+                    isLocked = true;
+                    partnersSection.classList.add('scroll-locked');
+                }
+            } else if (!isInViewport && rect.top >= viewportHeight) {
+                if (isLocked) {
+                    isLocked = false;
+                    partnersSection.classList.remove('scroll-locked');
+                }
+            }
+        });
+
+        partnersSection.addEventListener('wheel', function(e) {
+            if (isLocked) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                targetScrollX += e.deltaY;
+                targetScrollX = Math.max(0, Math.min(maxScroll, targetScrollX));
+
+                if (!isAnimating) {
+                    isAnimating = true;
+                    requestAnimationFrame(smoothScrollLoop);
+                }
+                return;
+            }
+        }, { passive: false });
+    }
+});

@@ -30,10 +30,9 @@
     <nav>
       <div class="logo">KRINFUD <span>DIGITALS</span></div>
       <div class="menu">
-        <a href="#">Services</a>
-        <a href="#">Work</a>
-        <a href="#">About</a>
-        <a href="#">Blog</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#showcase">Work</a>
         <button>Connect</button>
       </div>
     </nav>
@@ -42,7 +41,7 @@
   <section id="hero">
     <div id="three-container"></div>
     
-    <!-- Brand Universe Planets -->
+    <!-- Brand Universe Planets (Fades in when world is delivered) -->
     <div class="brand-universe">
       <a href="events.html" class="side-planet planet-events">
         <div class="planet-visual">
@@ -305,13 +304,14 @@
     </div>
   </section>
 
+  <!-- PARTNERS: Updated with IDs for Scroll Hijack -->
   <section id="partners" class="stripe">
     <div class="stripe-inner reveal">
       <h3 class="stripe-title small">Trusted By</h3>
       <h2 class="stripe-title big">Our Partners</h2>
     </div>
 
-    <div class="partners-marquee">
+    <div class="partners-marquee" id="partnersMarquee">
       <div class="partners-track" id="partnersTrack">
         <div class="partner-circle"><img src="images/partners/duka.png" alt="Partner logo"></div>
         <div class="partner-circle"><img src="images/partners/yanet.png" alt="Partner logo"></div>
@@ -319,6 +319,7 @@
         <div class="partner-circle"><img src="images/partners/hey.png" alt="Partner logo"></div>
         <div class="partner-circle"><img src="images/partners/need.png" alt="Partner logo"></div>
         <div class="partner-circle"><img src="images/partners/surreal.png" alt="Partner logo"></div>
+        <!-- Duplicate for seamless loop -->
         <div class="partner-circle"><img src="images/partners/duka.png" alt="Partner logo"></div>
         <div class="partner-circle"><img src="images/partners/yanet.png" alt="Partner logo"></div>
         <div class="partner-circle"><img src="images/partners/tobia.png" alt="Partner logo"></div>
@@ -411,6 +412,25 @@
       }
 
       animate();
+    });
+  </script>
+
+  <!-- Hide Navigation on Scroll Down -->
+  <script>
+    let lastScroll = 0;
+    const header = document.querySelector('header');
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      // Hide header when scrolling down past 100px, show when scrolling up
+      if (currentScroll > lastScroll && currentScroll > 100) {
+        header.classList.add('header-hidden');
+      } else {
+        header.classList.remove('header-hidden');
+      }
+      
+      lastScroll = currentScroll;
     });
   </script>
 

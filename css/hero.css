@@ -1,10 +1,84 @@
+:root {
+    --bg-dark: #1a0a0a;
+    --gold: #D4A843;
+    --maroon: #8B2635;
+    --text-light: #f5f5f5;
+    --text-muted: #6B6B6B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    font-family: Inter, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    cursor: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-light);
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+.cursor-dot {
+    width: 8px; 
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 999999;
+    box-shadow: 0 0 8px rgba(212, 168, 67, 0.8);
+}
+
+.cursor-ring {
+    width: 40px; 
+    height: 40px;
+    border: 1px solid rgba(212, 168, 67, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 999998;
+    transition: border-color 0.2s;
+}
+
+/* ==========================================
+   HEADER & NAVIGATION (TRANSPARENT - HIDES ON SCROLL)
+========================================== */
+
 header {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 20;
+    z-index: 1000;
     padding: 30px 60px;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+header.header-hidden {
+    transform: translateY(-100%);
+    opacity: 0;
 }
 
 nav {
@@ -16,6 +90,7 @@ nav {
 .logo {
     font-size: 28px;
     font-weight: 800;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .logo span {
@@ -27,6 +102,17 @@ nav {
     display: flex;
     align-items: center;
     gap: 45px;
+}
+
+.menu a {
+    font-size: 15px;
+    color: var(--text-light);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: color 0.3s;
+}
+
+.menu a:hover {
+    color: var(--gold);
 }
 
 .menu button {
@@ -44,7 +130,7 @@ nav {
 }
 
 /* ==========================================
-   HERO SECTION
+   HERO SECTION WITH BACKGROUND
 ========================================== */
 
 #hero {
@@ -52,10 +138,9 @@ nav {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-image:
-        radial-gradient(ellipse at center, rgba(42,26,26,0.55) 0%, rgba(42,26,26,0.92) 100%),
-        linear-gradient(180deg, rgba(42,26,26,0.6) 0%, rgba(42,26,26,0.3) 50%, rgba(0,0,0,0.95) 100%),
-        url("../images/krinfudlogo.png");
+    background-image: 
+        radial-gradient(ellipse at center, rgba(26,10,10,0.4) 0%, rgba(26,10,10,0.7) 100%),
+        url('../images/krinfudlogo.png');
     background-size: cover;
     background-position: center;
     background-color: var(--bg-dark);
@@ -111,7 +196,7 @@ nav {
 }
 
 /* ==========================================
-   BRAND UNIVERSE - 3D TILTED SATURN PLANETS (REDUCED SIZE)
+   BRAND UNIVERSE - PLANETS (HIDDEN INITIALLY, REVEALED BY JS)
 ========================================== */
 
 .brand-universe {
@@ -122,6 +207,18 @@ nav {
     height: 100%;
     z-index: 3;
     pointer-events: none;
+    
+    /* HIDDEN INITIALLY - Will be shown by JavaScript after intro */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+
+/* This class is added by JS when the world is delivered */
+.brand-universe.planets-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .side-planet {
@@ -159,7 +256,7 @@ nav {
     50% { transform: translateY(-15px); }
 }
 
-/* 3D Container for the planet - REDUCED FROM 100px to 70px */
+/* 3D Container for the planet */
 .planet-visual {
     position: relative;
     width: 70px;
@@ -194,7 +291,7 @@ nav {
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6), 0 0 30px rgba(212, 168, 67, 0.5);
 }
 
-/* The Saturn Ring - REDUCED FROM 190px to 130px */
+/* The Saturn Ring - Tilted and Rough */
 .planet-ring {
     position: absolute;
     top: 50%;
@@ -205,7 +302,6 @@ nav {
     margin-top: -65px;
     margin-left: -65px;
     
-    /* Thinner borders for smaller size */
     border: 4px solid rgba(212, 168, 67, 0.85);
     box-shadow: 
         0 0 0 2px rgba(139, 38, 53, 0.5), 

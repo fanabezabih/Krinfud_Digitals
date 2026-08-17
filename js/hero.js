@@ -59,12 +59,9 @@ const light = new THREE.DirectionalLight(0xffffff, 3);
 light.position.set(5, 8, 8);
 scene.add(light);
 
-
-
 const sphere = createSphere(scene);
 const textGroup = createTextEngine(scene);
 const cosmicGuy = createCosmicGuy(scene);
-
 
 const state = {
     isRotating: false,
@@ -121,6 +118,7 @@ const HAND_APPEAR_START = 0.9;
 const HAND_APPEAR_DURATION = 0.7;
 const DELIVERY_DURATION = 1.4;
 const TEXT_POP_DURATION = 0.6;
+const GUY_FADE_DURATION = 1.2; // Duration for the cosmic guy to fade out
 
 const T1 = GUY_FLIGHT_DURATION;
 const T2 = T1 + DELIVERY_DURATION;
@@ -129,9 +127,9 @@ const T3 = T2 + TEXT_POP_DURATION;
 let detached = false;
 let deliveryStartPos = null;
 let wanderClockOffset = null;
+let planetsRevealed = false; // Track if planets have been revealed
 
 function playIntro(realElapsed) {
-
     const t = introClock.getElapsedTime();
 
     if (t < T1) {
@@ -192,30 +190,43 @@ function playIntro(realElapsed) {
         const eased = Math.max(easeOutBack(popT), 0);
         textGroup.scale.setScalar(eased);
 
+        // REVEAL PLANETS exactly when the world is delivered and text pops
+        if (!planetsRevealed) {
+            const brandUniverse = document.querySelector('.brand-universe');
+            if (brandUniverse) {
+                brandUniverse.classList.add('planets-visible');
+            }
+            planetsRevealed = true;
+        }
+
+        // START FADING OUT COSMIC GUY AFTER DELIVERY
+        const fadeT = Math.min((t - T2) / GUY_FADE_DURATION, 1);
+        const fadeOpacity = 1 - fadeT;
+        
+        cosmicGuy.userData.sprite.material.opacity = fadeOpacity;
+        cosmicGuy.userData.sprite.scale.set(
+            SPRITE_WIDTH * GUY_SCALE_AFTER_DROP * fadeOpacity,
+            SPRITE_HEIGHT * GUY_SCALE_AFTER_DROP * fadeOpacity,
+            1
+        );
+
     } else {
         sphere.position.copy(sphereHome);
         sphere.scale.setScalar(1);
         textGroup.scale.setScalar(1);
 
-        cosmicGuy.userData.sprite.scale.set(
-            SPRITE_WIDTH * GUY_SCALE_AFTER_DROP,
-            SPRITE_HEIGHT * GUY_SCALE_AFTER_DROP,
-            1
-        );
+        // COSMIC GUY IS NOW FULLY INVISIBLE AND HIDDEN
+        cosmicGuy.userData.sprite.material.opacity = 0;
+        cosmicGuy.visible = false; 
 
         if (wanderClockOffset === null) {
             wanderClockOffset = realElapsed;
         }
         state.introComplete = true;
     }
-
 }
 
-
-
 const TEXT_ROTATION_SPEED = 0.15;
-
-
 
 function worldUnitsPerPixelAt(distance) {
     const vFov = THREE.MathUtils.degToRad(camera.fov);
@@ -235,8 +246,6 @@ function applyScrollCompensation() {
     textGroup.position.y = textHome.y + scrollY * perPixelText;
 }
 
-
-
 function getScrollProgress() {
     const scrollY = window.scrollY || window.pageYOffset;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -244,13 +253,10 @@ function getScrollProgress() {
     return THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
 }
 
-
-
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 window.addEventListener("click", (event) => {
-
     if (!state.introComplete) return;
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -262,11 +268,9 @@ window.addEventListener("click", (event) => {
     if (intersects.length > 0) {
         state.isRotating = true;
     }
-
 });
 
 window.addEventListener("mousemove", (event) => {
-
     if (!state.introComplete) {
         renderer.domElement.style.cursor = "default";
         return;
@@ -279,15 +283,11 @@ window.addEventListener("mousemove", (event) => {
     const hovering = raycaster.intersectObject(sphere).length > 0;
 
     renderer.domElement.style.cursor = hovering ? "pointer" : "default";
-
 });
-
-
 
 const clock = new THREE.Clock();
 
 function guyLoop() {
-
     requestAnimationFrame(guyLoop);
 
     const realElapsed = clock.getElapsedTime();
@@ -302,18 +302,16 @@ function guyLoop() {
         const wanderElapsed = realElapsed - wanderClockOffset;
         const scrollProgress = getScrollProgress();
 
-        updateCosmicGuy(cosmicGuy, wanderElapsed, camera, scrollProgress);
+        // Only update cosmic guy if he's still visible (good for performance)
+        if (cosmicGuy.visible) {
+            updateCosmicGuy(cosmicGuy, wanderElapsed, camera, scrollProgress);
+        }
     }
-
 }
 
 guyLoop();
 
-
-
 animate(renderer, scene, camera, sphere, textGroup, state);
-
-
 
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
