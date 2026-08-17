@@ -15,10 +15,10 @@ const ICON_FILES = [
     "vector10.png",
     "vector11.png",
     "vector12.png",
-    "vector9.png",
-    "vector9.png",
-    "vector9.png",
-    "vector9.png",
+    "vector1.png",
+    "vector2.png",
+    "vector3.png",
+    "vector7.png",
 ];
 
 // CHANGED: Added leading slash for Vite production builds
