@@ -3,7 +3,6 @@ import * as THREE from "three";
 const GOLD = "#B8860B";
 
 const ICON_FILES = [
-
     "vector1.png",
     "vector2.png",
     "vector3.png",
@@ -20,11 +19,10 @@ const ICON_FILES = [
     "vector9.png",
     "vector9.png",
     "vector9.png",
-
-
 ];
 
-const ICON_PATH = "images/";
+// CHANGED: Added leading slash for Vite production builds
+const ICON_PATH = "/images/";
 
 function loadImage(src) {
     return new Promise((resolve, reject) => {
@@ -32,7 +30,7 @@ function loadImage(src) {
         img.onload = () => resolve(img);
         img.onerror = () => {
             console.warn(`Icon failed to load: ${src}`);
-            resolve(null); // don't block the whole sphere on one missing file
+            resolve(null);
         };
         img.src = src;
     });
@@ -99,9 +97,8 @@ async function createIconTexture() {
 }
 
 export function createSphere(scene) {
-const geometry = new THREE.SphereGeometry(1.6, 64, 64);
+    const geometry = new THREE.SphereGeometry(1.6, 64, 64);
 
-  
     const material = new THREE.MeshStandardMaterial({
         color: GOLD,
         roughness: 0.55,

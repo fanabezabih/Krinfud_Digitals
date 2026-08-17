@@ -11,7 +11,7 @@ export function createCosmicGuy(scene) {
     const rig = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load("images/cosmic2.png");
+const texture = textureLoader.load("/images/cosmic2.png"); // Added the slash
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.generateMipmaps = false;
     texture.minFilter = THREE.LinearFilter;
