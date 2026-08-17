@@ -326,7 +326,7 @@ button {
 }
 
 /* ==========================================
-   INVEST: FLOWY TYPOGRAPHIC BLEND (MASSIVE TEXT)
+   INVEST: FLOWY TYPOGRAPHIC BLEND (STATIC BACKGROUND TEXT)
 ========================================== */
 
 .invest-flowy {
@@ -374,18 +374,13 @@ button {
     transform: translate(-50%, -50%);
     z-index: 1;
     user-select: none;
-    transition: all 0.6s ease;
+    /* Transition removed so it doesn't animate on hover */
     white-space: nowrap;
     width: auto;
     min-width: 100%;
 }
 
-.invest-composition:hover .invest-huge-text {
-    background: linear-gradient(180deg, rgba(212, 168, 67, 0.3) 0%, rgba(212, 168, 67, 0.1) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    transform: translate(-50%, -50%) scale(1.02);
-}
+/* Hover effect on the text removed completely */
 
 .gold-dot {
     -webkit-text-fill-color: var(--gold);
@@ -668,7 +663,7 @@ button {
     overflow-y: hidden;
     scrollbar-width: none;
     
-    /* UPDATED: Soft fade on both left and right edges */
+    /* Soft fade on both left and right edges */
     -webkit-mask-image: linear-gradient(to right, transparent, white 15%, white 85%, transparent);
     mask-image: linear-gradient(to right, transparent, white 15%, white 85%, transparent);
     
