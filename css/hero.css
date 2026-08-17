@@ -91,11 +91,21 @@ nav {
     align-items: center;
 }
 
+/* Update the existing .logo class in hero.css */
 .logo {
-    font-size: 28px;
-    font-weight: 800;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+       padding-left: 70px; /* Pushes it right */
 }
+
+.logo img {
+    height: 70px; /* Adjust this height to make your logo bigger/smaller */
+    width: auto;  /* Keeps the aspect ratio correct */
+    object-fit: contain;
+
+}
+
+/* Keep the text shadow for the menu items if you want, but remove it for the logo if needed */
 
 .logo span {
     font-weight: 300;
