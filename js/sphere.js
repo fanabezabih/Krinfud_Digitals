@@ -3,22 +3,28 @@ import * as THREE from "three";
 const GOLD = "#B8860B";
 
 const ICON_FILES = [
-    "vector1.png",
-    "vector2.png",
-    "vector3.png",
+    "Vector1.png",
+    "Vector2.png",
+    "Vector3.png",
     "vector4.png",
-    "vector5.png",
-    "vector6.png",
+    "Vector5.png",
+    "Vector6.png",
     "vector7.png",
-    "vector8.png",
-    "vector9.png",
-    "vector10.png",
-    "vector11.png",
-    "vector12.png",
-    "vector1.png",
-    "vector2.png",
-    "vector3.png",
-    "vector7.png",
+    "Vector8.png",
+    "Vector9.png",
+    "Vector10.png",
+    "Vector11.png",
+    "Vector12.png",
+    "Vector13.png",
+    "Vector14.png",
+    "Vector15.png",
+    "Vector16.png",
+    "Vector17.png",
+    "Vector18.png",
+    "Vector19.png",
+    "Vector20.png",
+    "Vector21.png",
+    "Vector22.png",
 ];
 
 // CHANGED: Added leading slash for Vite production builds
@@ -97,7 +103,7 @@ async function createIconTexture() {
 }
 
 export function createSphere(scene) {
-    const geometry = new THREE.SphereGeometry(1.6, 64, 64);
+    const geometry = new THREE.SphereGeometry(1.4, 64, 64);
 
     const material = new THREE.MeshStandardMaterial({
         color: GOLD,

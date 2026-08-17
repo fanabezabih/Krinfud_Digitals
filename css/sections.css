@@ -242,7 +242,7 @@ button {
 .laptop-frame {
     background: #e8e8e8;
     border-radius: 16px;
-    padding: 24px 20px 18px;
+    padding: 12px 10px 10px; /* REDUCED from 24px 20px 18px */
     box-shadow: 
         0 20px 50px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(255,255,255,0.05);
@@ -261,7 +261,7 @@ button {
     border-radius: 8px;
     aspect-ratio: 16/10;
     overflow: hidden;
-    border: 2px solid #2a2a2a;
+    border: 1px solid #2a2a2a;
 }
 
 .laptop-screen img {
@@ -305,7 +305,7 @@ button {
 }
 
 .laptop-base {
-    height: 8px;
+    height: 6px; /* REDUCED from 8px */
     background: linear-gradient(180deg, #d8d8d8 0%, #b8b8b8 100%);
     border-radius: 0 0 6px 6px;
     margin-top: 3px;
@@ -326,7 +326,7 @@ button {
 }
 
 /* ==========================================
-   INVEST: FLOWY TYPOGRAPHIC BLEND (STATIC BACKGROUND TEXT)
+   INVEST: FLOWY TYPOGRAPHIC BLEND (MASSIVE TEXT)
 ========================================== */
 
 .invest-flowy {
@@ -374,13 +374,18 @@ button {
     transform: translate(-50%, -50%);
     z-index: 1;
     user-select: none;
-    /* Transition removed so it doesn't animate on hover */
+    transition: all 0.6s ease;
     white-space: nowrap;
     width: auto;
     min-width: 100%;
 }
 
-/* Hover effect on the text removed completely */
+.invest-composition:hover .invest-huge-text {
+    background: linear-gradient(180deg, rgba(212, 168, 67, 0.3) 0%, rgba(212, 168, 67, 0.1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    transform: translate(-50%, -50%) scale(1.02);
+}
 
 .gold-dot {
     -webkit-text-fill-color: var(--gold);
@@ -663,7 +668,7 @@ button {
     overflow-y: hidden;
     scrollbar-width: none;
     
-    /* Soft fade on both left and right edges */
+    /* UPDATED: Soft fade on both left and right edges */
     -webkit-mask-image: linear-gradient(to right, transparent, white 15%, white 85%, transparent);
     mask-image: linear-gradient(to right, transparent, white 15%, white 85%, transparent);
     
