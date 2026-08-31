@@ -12,8 +12,7 @@
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     min-height: 100%;
     overflow-x: hidden;
@@ -23,60 +22,44 @@ body {
     cursor: none;
 }
 
-a {
-    text-decoration: none;
-    color: var(--text-light);
-}
-
-button {
-    border: none;
-    cursor: pointer;
-}
+a { text-decoration: none; color: var(--text-light); }
+button { border: none; cursor: pointer; }
 
 /* ==========================================
    CUSTOM CURSOR
 ========================================== */
-
 .cursor-dot {
-    width: 8px; 
-    height: 8px;
+    width: 8px; height: 8px;
     background: var(--gold);
     border-radius: 50%;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     pointer-events: none;
     z-index: 999999;
     box-shadow: 0 0 8px rgba(212, 168, 67, 0.8);
 }
 
 .cursor-ring {
-    width: 40px; 
-    height: 40px;
+    width: 40px; height: 40px;
     border: 1px solid rgba(212, 168, 67, 0.5);
     border-radius: 50%;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     pointer-events: none;
     z-index: 999998;
     transition: border-color 0.2s;
 }
 
 /* ==========================================
-   HEADER & NAVIGATION (TRANSPARENT - HIDES ON SCROLL)
+   HEADER & NAVIGATION (RESPONSIVE)
 ========================================== */
-
 header {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     width: 100%;
     z-index: 1000;
     padding: 30px 60px;
     background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
@@ -91,25 +74,16 @@ nav {
     align-items: center;
 }
 
-/* Update the existing .logo class in hero.css */
 .logo {
     display: flex;
     align-items: center;
-       padding-left: 70px; /* Pushes it right */
+    padding-left: 20px;
 }
 
 .logo img {
-    height: 70px; /* Adjust this height to make your logo bigger/smaller */
-    width: auto;  /* Keeps the aspect ratio correct */
+    height: 50px;
+    width: auto;
     object-fit: contain;
-
-}
-
-/* Keep the text shadow for the menu items if you want, but remove it for the logo if needed */
-
-.logo span {
-    font-weight: 300;
-    color: var(--gold);
 }
 
 .menu {
@@ -125,9 +99,7 @@ nav {
     transition: color 0.3s;
 }
 
-.menu a:hover {
-    color: var(--gold);
-}
+.menu a:hover { color: var(--gold); }
 
 .menu button {
     padding: 14px 28px;
@@ -143,23 +115,75 @@ nav {
     color: var(--bg-dark);
 }
 
-/* ==========================================
-   HERO SECTION (DIMMED & TALLER)
-========================================== */
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    padding: 10px;
+    z-index: 1001;
+}
 
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 2px;
+    background: var(--text-light);
+    transition: all 0.3s ease;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: rgba(26, 10, 10, 0.98);
+    backdrop-filter: blur(10px);
+    z-index: 999;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    transition: right 0.4s ease;
+}
+
+.mobile-menu.active { right: 0; }
+
+.mobile-menu a {
+    font-size: 24px;
+    color: var(--text-light);
+}
+
+.mobile-menu button {
+    padding: 16px 32px;
+    background: var(--maroon);
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+/* ==========================================
+   HERO SECTION
+========================================== */
 #hero {
     position: relative;
     width: 100vw;
-    height: 110vh; /* Taller to show more background */
+    height: 110vh;
     overflow: hidden;
-    
+    transition: opacity 0.5s ease;
     background-image: 
         radial-gradient(ellipse at center, rgba(26,10,10,0.65) 0%, rgba(26,10,10,0.88) 100%),
         url('../images/krinfudlogo.png');
-        
     background-size: cover;
     background-position: center;
     background-color: var(--bg-dark);
+}
+
+#hero.fading-out {
+    opacity: 0;
+    pointer-events: none;
 }
 
 #three-container {
@@ -183,7 +207,7 @@ nav {
     font-size: 14px;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: #ffffff; /* Changed to white */
+    color: #ffffff;
     font-weight: 400;
     opacity: 0.9;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -213,18 +237,14 @@ nav {
 }
 
 /* ==========================================
-   BRAND UNIVERSE - PLANETS
+   BRAND UNIVERSE - PLANETS (RESPONSIVE)
 ========================================== */
-
 .brand-universe {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 3;
     pointer-events: none;
-    
     opacity: 0;
     visibility: hidden;
     transition: opacity 1.2s ease, visibility 1.2s ease;
@@ -249,21 +269,10 @@ nav {
     animation: float-planet 6s ease-in-out infinite;
 }
 
-.side-planet:hover {
-    transform: scale(1.15);
-}
+.side-planet:hover { transform: scale(1.15); }
 
-.planet-events {
-    top: 58%; 
-    left: 6%;
-    animation-delay: 0s;
-}
-
-.planet-creatives {
-    top: 42%; 
-    right: 6%;
-    animation-delay: 3s;
-}
+.planet-events { top: 58%; left: 6%; animation-delay: 0s; }
+.planet-creatives { top: 42%; right: 6%; animation-delay: 3s; }
 
 @keyframes float-planet {
     0%, 100% { transform: translateY(0px); }
@@ -272,8 +281,7 @@ nav {
 
 .planet-visual {
     position: relative;
-    width: 70px;
-    height: 70px;
+    width: 70px; height: 70px;
     transform-style: preserve-3d;
     perspective: 1000px;
 }
@@ -287,58 +295,43 @@ nav {
     transition: box-shadow 0.4s ease;
 }
 
-/* Events Sphere - Gold/Maroon */
 .planet-events .planet-sphere {
     background: radial-gradient(circle at 30% 30%, #D4A843, #8B2635);
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6);
 }
 
-/* Creatives Sphere - NOW BRIGHTER (Light Gold / Warm Maroon) */
 .planet-creatives .planet-sphere {
     background: radial-gradient(circle at 30% 30%, #E8C56D, #8B2635);
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.5);
 }
 
-/* Generic Hover Glow */
 .side-planet:hover .planet-sphere {
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.6), 0 0 30px rgba(212, 168, 67, 0.5);
 }
 
-/* Specific Brighter Hover Glow for Creatives */
 .planet-creatives:hover .planet-sphere {
     box-shadow: inset -8px -8px 20px rgba(0,0,0,0.5), 0 0 30px rgba(232, 197, 109, 0.6);
 }
 
 .planet-ring {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 130px;
-    height: 130px;
+    top: 50%; left: 50%;
+    width: 130px; height: 130px;
     border-radius: 50%;
-    margin-top: -65px;
-    margin-left: -65px;
-    
+    margin-top: -65px; margin-left: -65px;
     border: 4px solid rgba(212, 168, 67, 0.85);
-    box-shadow: 
-        0 0 0 2px rgba(139, 38, 53, 0.5), 
-        inset 0 0 0 2px rgba(255, 255, 255, 0.2); 
-    
+    box-shadow: 0 0 0 2px rgba(139, 38, 53, 0.5), inset 0 0 0 2px rgba(255, 255, 255, 0.2); 
     transform: rotateX(75deg) rotateZ(-20deg);
 }
 
 .planet-events .planet-ring {
     border-color: rgba(212, 168, 67, 0.9);
-    box-shadow: 
-        0 0 0 3px rgba(139, 38, 53, 0.6), 
-        inset 0 0 0 3px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba(139, 38, 53, 0.6), inset 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
 .planet-creatives .planet-ring {
-    border-color: rgba(232, 197, 109, 0.9); /* Brighter ring to match */
-    box-shadow: 
-        0 0 0 3px rgba(139, 38, 53, 0.6), 
-        inset 0 0 0 3px rgba(255, 255, 255, 0.25);
+    border-color: rgba(232, 197, 109, 0.9);
+    box-shadow: 0 0 0 3px rgba(139, 38, 53, 0.6), inset 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
 .planet-label {
@@ -363,26 +356,38 @@ nav {
 }
 
 /* ==========================================
-   RESPONSIVE
+   RESPONSIVE MEDIA QUERIES
 ========================================== */
-
 @media (max-width: 1024px) {
     .planet-events { left: 4%; top: 55%; }
     .planet-creatives { right: 4%; top: 45%; }
-    
     .planet-visual { width: 60px; height: 60px; }
     .planet-ring { width: 110px; height: 110px; margin-top: -55px; margin-left: -55px; }
 }
 
 @media (max-width: 768px) {
-    .planet-events { left: 2%; top: 52%; }
-    .planet-creatives { right: 2%; top: 48%; }
+    header { padding: 20px 30px; }
+    .logo img { height: 40px; }
     
+    .mobile-menu-toggle { display: flex; }
+    .menu { display: none; }
+    .mobile-menu { display: flex; }
+    
+    .planet-events { left: 2%; top: 55%; }
+    .planet-creatives { right: 2%; top: 45%; }
     .planet-visual { width: 50px; height: 50px; }
     .planet-ring { width: 90px; height: 90px; margin-top: -45px; margin-left: -45px; border-width: 3px; }
-    .planet-label { font-size: 10px; padding: 6px 14px; }
+    .planet-label { font-size: 9px; padding: 6px 14px; }
+    
+    .tagline { font-size: 11px; padding: 0 20px; }
 }
 
 @media (max-width: 480px) {
-    .side-planet { display: none; }
+    .logo img { height: 35px; }
+    .planet-events { left: 1%; top: 58%; }
+    .planet-creatives { right: 1%; top: 42%; }
+    .planet-visual { width: 40px; height: 40px; }
+    .planet-ring { width: 70px; height: 70px; margin-top: -35px; margin-left: -35px; border-width: 2px; }
+    .planet-label { font-size: 8px; padding: 4px 10px; }
+    .tagline { font-size: 10px; }
 }
