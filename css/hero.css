@@ -77,11 +77,11 @@ nav {
 .logo {
     display: flex;
     align-items: center;
-    padding-left: 20px;
+    padding-left: 40px;
 }
 
 .logo img {
-    height: 50px;
+    height: 65px;
     width: auto;
     object-fit: contain;
 }
