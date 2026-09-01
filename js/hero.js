@@ -1,5 +1,4 @@
 import * as THREE from "three";
-
 import { createSphere } from "./sphere.js";
 import { createTextEngine } from "./textEngine.js";
 import {
@@ -14,16 +13,8 @@ import { initCustomCursor } from "./cursor.js";
 
 initCustomCursor();
 
-// --------------------
-// Scene
-// --------------------
-
 const scene = new THREE.Scene();
 scene.background = null;
-
-// --------------------
-// Camera
-// --------------------
 
 const camera = new THREE.PerspectiveCamera(
     30,
@@ -33,10 +24,6 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 camera.position.set(0, 0, 18);
-
-// --------------------
-// Renderer
-// --------------------
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -48,10 +35,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 document.getElementById("three-container").appendChild(renderer.domElement);
-
-// --------------------
-// Lights
-// --------------------
 
 scene.add(new THREE.AmbientLight(0xffffff, 2));
 
@@ -65,12 +48,10 @@ const cosmicGuy = createCosmicGuy(scene);
 
 const state = {
     isRotating: false,
-    introComplete: false
+    introComplete: false,
+    isScrolling: false,
+    scrollY: 0
 };
-
-// --------------------
-// Easing helpers
-// --------------------
 
 function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
@@ -87,10 +68,6 @@ function easeOutBack(t) {
     const c3 = c1 + 1;
     return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 }
-
-// --------------------
-// Intro sequence
-// --------------------
 
 const GUY_SCALE = 0.5;
 const GUY_SCALE_AFTER_DROP = 0.32;
@@ -118,7 +95,7 @@ const HAND_APPEAR_START = 0.9;
 const HAND_APPEAR_DURATION = 0.7;
 const DELIVERY_DURATION = 1.4;
 const TEXT_POP_DURATION = 0.6;
-const GUY_FADE_DURATION = 1.2; // Duration for the cosmic guy to fade out
+const GUY_FADE_DURATION = 1.2;
 
 const T1 = GUY_FLIGHT_DURATION;
 const T2 = T1 + DELIVERY_DURATION;
@@ -127,7 +104,7 @@ const T3 = T2 + TEXT_POP_DURATION;
 let detached = false;
 let deliveryStartPos = null;
 let wanderClockOffset = null;
-let planetsRevealed = false; // Track if planets have been revealed
+let planetsRevealed = false;
 
 function playIntro(realElapsed) {
     const t = introClock.getElapsedTime();
@@ -190,7 +167,6 @@ function playIntro(realElapsed) {
         const eased = Math.max(easeOutBack(popT), 0);
         textGroup.scale.setScalar(eased);
 
-        // REVEAL PLANETS exactly when the world is delivered and text pops
         if (!planetsRevealed) {
             const brandUniverse = document.querySelector('.brand-universe');
             if (brandUniverse) {
@@ -199,7 +175,6 @@ function playIntro(realElapsed) {
             planetsRevealed = true;
         }
 
-        // START FADING OUT COSMIC GUY AFTER DELIVERY
         const fadeT = Math.min((t - T2) / GUY_FADE_DURATION, 1);
         const fadeOpacity = 1 - fadeT;
         
@@ -215,7 +190,6 @@ function playIntro(realElapsed) {
         sphere.scale.setScalar(1);
         textGroup.scale.setScalar(1);
 
-        // COSMIC GUY IS NOW FULLY INVISIBLE AND HIDDEN
         cosmicGuy.userData.sprite.material.opacity = 0;
         cosmicGuy.visible = false; 
 
@@ -228,23 +202,51 @@ function playIntro(realElapsed) {
 
 const TEXT_ROTATION_SPEED = 0.15;
 
+// OPTIMIZED: Only calculate when needed
 function worldUnitsPerPixelAt(distance) {
     const vFov = THREE.MathUtils.degToRad(camera.fov);
     const visibleHeight = 2 * Math.tan(vFov / 2) * distance;
     return visibleHeight / window.innerHeight;
 }
 
-function applyScrollCompensation() {
-    const scrollY = window.scrollY || window.pageYOffset;
+// Cache these values
+let perPixelSphere = 0;
+let perPixelText = 0;
 
+function updateScrollMetrics() {
     const sphereDistance = camera.position.z - sphereHome.z;
-    const perPixelSphere = worldUnitsPerPixelAt(sphereDistance);
-    sphere.position.y = sphereHome.y + scrollY * perPixelSphere;
-
+    perPixelSphere = worldUnitsPerPixelAt(sphereDistance);
+    
     const textDistance = camera.position.z - textHome.z;
-    const perPixelText = worldUnitsPerPixelAt(textDistance);
-    textGroup.position.y = textHome.y + scrollY * perPixelText;
+    perPixelText = worldUnitsPerPixelAt(textDistance);
 }
+
+// OPTIMIZED: Apply scroll compensation efficiently
+function applyScrollCompensation() {
+    sphere.position.y = sphereHome.y + state.scrollY * perPixelSphere;
+    textGroup.position.y = textHome.y + state.scrollY * perPixelText;
+}
+
+// OPTIMIZED: Throttled scroll handler
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    state.scrollY = window.scrollY || window.pageYOffset;
+    
+    // Only update metrics when scrolling starts
+    if (!state.isScrolling) {
+        updateScrollMetrics();
+        state.isScrolling = true;
+    }
+    
+    // Reset scrolling flag after scroll stops
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        state.isScrolling = false;
+    }, 150);
+}, { passive: true });
+
+// Initialize metrics
+updateScrollMetrics();
 
 function getScrollProgress() {
     const scrollY = window.scrollY || window.pageYOffset;
@@ -286,6 +288,7 @@ window.addEventListener("mousemove", (event) => {
 });
 
 const clock = new THREE.Clock();
+let lastScrollUpdate = 0;
 
 function guyLoop() {
     requestAnimationFrame(guyLoop);
@@ -297,12 +300,16 @@ function guyLoop() {
     if (!state.introComplete) {
         playIntro(realElapsed);
     } else {
-        applyScrollCompensation();
+        // OPTIMIZED: Only update scroll compensation every other frame or when scrolling
+        const now = performance.now();
+        if (state.isScrolling || (now - lastScrollUpdate) > 50) {
+            applyScrollCompensation();
+            lastScrollUpdate = now;
+        }
 
         const wanderElapsed = realElapsed - wanderClockOffset;
         const scrollProgress = getScrollProgress();
 
-        // Only update cosmic guy if he's still visible (good for performance)
         if (cosmicGuy.visible) {
             updateCosmicGuy(cosmicGuy, wanderElapsed, camera, scrollProgress);
         }
@@ -317,4 +324,5 @@ window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    updateScrollMetrics();
 });

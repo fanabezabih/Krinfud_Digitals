@@ -6,13 +6,13 @@ if ('scrollRestoration' in history) {
 }
 window.scrollTo(0, 0);
 
-
 // ==========================================
-// SMOOTH SCROLL REVEAL ANIMATIONS
+// OPTIMIZED SCROLL REVEAL (Debounced)
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', function() {
     const reveals = document.querySelectorAll('.reveal');
+    let revealTick = false;
 
     const revealOnScroll = () => {
         const windowHeight = window.innerHeight;
@@ -24,15 +24,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 reveal.classList.add('in-view');
             }
         });
+        
+        revealTick = false;
     };
 
-    window.addEventListener('scroll', revealOnScroll);
+    // OPTIMIZED: Use requestAnimationFrame instead of direct scroll handler
+    function onScroll() {
+        if (!revealTick) {
+            requestAnimationFrame(revealOnScroll);
+            revealTick = true;
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
     revealOnScroll();
 });
 
-
 // ==========================================
-// PARTNERS SECTION - SMOOTH HORIZONTAL SCROLL HIJACK + DOTS
+// PARTNERS SECTION - OPTIMIZED
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -40,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const partnersMarquee = document.querySelector('.partners-marquee');
     const partnersTrack = document.getElementById('partnersTrack');
     const partnersDotsContainer = document.getElementById('partnersDots');
-    const footer = document.querySelector('.site-footer');
 
     if (partnersSection && partnersMarquee && partnersTrack && partnersDotsContainer) {
         
@@ -50,9 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let isAnimating = false;
         let isLocked = false;
         const lerpFactor = 0.12;
-        
-        // We have 6 unique partners in the HTML
-        const numDots = 6; 
+        const numDots = 6;
 
         function calculateMaxScroll() {
             maxScroll = partnersTrack.scrollWidth - partnersMarquee.clientWidth;
@@ -62,12 +68,11 @@ document.addEventListener('DOMContentLoaded', function() {
         calculateMaxScroll();
         window.addEventListener('resize', () => {
             calculateMaxScroll();
-            updateDots(); // Recalculate dot positions on resize
-        });
+            updateDots();
+        }, { passive: true });
 
-        // Generate Navigation Dots
         function generateDots() {
-            partnersDotsContainer.innerHTML = ''; // Clear existing
+            partnersDotsContainer.innerHTML = '';
             for (let i = 0; i < numDots; i++) {
                 const dot = document.createElement('button');
                 dot.classList.add('partners-dot');
@@ -88,34 +93,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Update active dot based on current scroll position
         function updateDots() {
             const stepWidth = maxScroll / (numDots - 1);
             const activeIndex = Math.round(currentScrollX / stepWidth);
             const dots = partnersDotsContainer.querySelectorAll('.partners-dot');
             
             dots.forEach((dot, index) => {
-                if (index === activeIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
+                dot.classList.toggle('active', index === activeIndex);
             });
         }
 
         generateDots();
 
-        // Smooth animation loop
         function smoothScrollLoop() {
             currentScrollX += (targetScrollX - currentScrollX) * lerpFactor;
             currentScrollX = Math.max(0, Math.min(maxScroll, currentScrollX));
             
             partnersMarquee.scrollLeft = currentScrollX;
-            
-            // Update dots during animation
             updateDots();
 
-            // Check if we've reached the end
             const atEnd = currentScrollX >= maxScroll - 2;
             
             if (atEnd && isLocked) {
@@ -128,30 +124,35 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 currentScrollX = targetScrollX;
                 partnersMarquee.scrollLeft = currentScrollX;
-                updateDots(); // Final snap to correct dot
+                updateDots();
                 isAnimating = false;
             }
         }
 
-        // Global scroll listener to detect when we enter/exit partners section
-        window.addEventListener('scroll', function() {
-            const rect = partnersSection.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            
-            const isInViewport = rect.top < viewportHeight && rect.bottom > 0;
-            
-            if (isInViewport && currentScrollX < maxScroll) {
-                if (!isLocked) {
-                    isLocked = true;
-                    partnersSection.classList.add('scroll-locked');
-                }
-            } else if (!isInViewport && rect.top >= viewportHeight) {
-                if (isLocked) {
-                    isLocked = false;
-                    partnersSection.classList.remove('scroll-locked');
-                }
-            }
-        });
+        // OPTIMIZED: Use IntersectionObserver instead of scroll listener
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    const rect = entry.boundingClientRect;
+                    const viewportHeight = window.innerHeight;
+                    
+                    if (entry.isIntersecting && currentScrollX < maxScroll) {
+                        if (!isLocked) {
+                            isLocked = true;
+                            partnersSection.classList.add('scroll-locked');
+                        }
+                    } else if (!entry.isIntersecting && rect.top >= viewportHeight) {
+                        if (isLocked) {
+                            isLocked = false;
+                            partnersSection.classList.remove('scroll-locked');
+                        }
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(partnersSection);
 
         partnersSection.addEventListener('wheel', function(e) {
             if (isLocked) {
@@ -165,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     isAnimating = true;
                     requestAnimationFrame(smoothScrollLoop);
                 }
-                return;
             }
         }, { passive: false });
     }
